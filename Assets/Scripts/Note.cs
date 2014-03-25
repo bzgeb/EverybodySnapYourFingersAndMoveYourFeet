@@ -1,16 +1,25 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
-public enum NoteTarget {
-    TopLeft,
-    TopRight,
-    MidLeft,
-    MidRight,
-    BottomLeft,
-    BottomRight
-}
+//In game representation of a note
+public class Note : MonoBehaviour 
+{
+    //Cached transform
+    Transform _transform;
 
-[System.Serializable]
-public class Note {
-    public int timeInSamples;
-    public NoteTarget target;
+    public AudioSource music;
+    public int strumTime;
+
+    void Awake() {
+        _transform = GetComponent<Transform>();
+    }
+
+    void Start() {
+        music = GameObject.FindWithTag( "Music" ).GetComponent<AudioSource>();
+    }
+
+    void Update() {
+        Debug.Log( "Samples: " + music.timeSamples );
+        _transform.position = RhythmTarget.TopLeftTargetPosition - ( new Vector3( 0.0001f, 0.0001f, 0.0001f ) * ( music.timeSamples - strumTime ) );
+    }
 }
