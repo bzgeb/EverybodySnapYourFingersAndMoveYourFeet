@@ -19,7 +19,10 @@ public class Note : MonoBehaviour
     }
 
     void Update() {
-        Debug.Log( "Samples: " + music.timeSamples );
-        _transform.position = RhythmTarget.TopLeftTargetPosition - ( new Vector3( 0.0001f, 0.0001f, 0.0001f ) * ( music.timeSamples - strumTime ) );
+        Vector3 newPos = Vector3.zero;
+        newPos.y = RhythmTarget.TopLeftTargetPosition.y + ( music.timeSamples - strumTime ) * 0.00008f;
+        newPos.x = RhythmTarget.TopLeftTargetPosition.x - ( music.timeSamples - strumTime ) * 0.00008f;
+        _transform.position = newPos;
+        // _transform.position = Global.noteCenterPosition + ( RhythmTarget.TopLeftTargetPosition - Global.noteCenterPosition ) * ( (float)music.timeSamples / (float)strumTime );
     }
 }
