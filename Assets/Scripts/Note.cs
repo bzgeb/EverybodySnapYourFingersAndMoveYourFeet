@@ -10,19 +10,53 @@ public class Note : MonoBehaviour
     public AudioSource music;
     public int strumTime;
 
+    public NoteData noteData;
+    Vector3 targetPosition;
+
+    int xMultiplier;
+    int yMultiplier;
+
     void Awake() {
         _transform = GetComponent<Transform>();
     }
 
     void Start() {
         music = GameObject.FindWithTag( "Music" ).GetComponent<AudioSource>();
+
+        if ( noteData.target == NoteTarget.TopLeft ) {
+            targetPosition = RhythmTarget.TopLeftTargetPosition;
+            xMultiplier = -1;
+            yMultiplier = 1;
+        } else if ( noteData.target == NoteTarget.TopRight ) {
+            targetPosition = RhythmTarget.TopRightTargetPosition;
+            xMultiplier = 1;
+            yMultiplier = 1;
+        } else if ( noteData.target == NoteTarget.MidLeft ) {
+            targetPosition = RhythmTarget.MidLeftTargetPosition;
+            xMultiplier = -1;
+            yMultiplier = 0;
+        } else if ( noteData.target == NoteTarget.MidRight ) {
+            targetPosition = RhythmTarget.MidRightTargetPosition;
+            xMultiplier = 1;
+            yMultiplier = 0;
+        } else if ( noteData.target == NoteTarget.BottomLeft ) {
+            targetPosition = RhythmTarget.BottomLeftTargetPosition;
+            xMultiplier = -1;
+            yMultiplier = -1;
+        } else if ( noteData.target == NoteTarget.BottomRight ) {
+            targetPosition = RhythmTarget.BottomRightTargetPosition;
+            xMultiplier = 1;
+            yMultiplier = -1;
+        }
     }
 
     void Update() {
+        int dist = music.timeSamples - noteData.timeInSamples;
         Vector3 newPos = Vector3.zero;
-        newPos.y = RhythmTarget.TopLeftTargetPosition.y + ( music.timeSamples - strumTime ) * 0.00008f;
-        newPos.x = RhythmTarget.TopLeftTargetPosition.x - ( music.timeSamples - strumTime ) * 0.00008f;
+
+        newPos.y = targetPosition.y + dist * 0.00008f * yMultiplier;
+        newPos.x = targetPosition.x + dist * 0.00008f * xMultiplier;
+
         _transform.position = newPos;
-        // _transform.position = Global.noteCenterPosition + ( RhythmTarget.TopLeftTargetPosition - Global.noteCenterPosition ) * ( (float)music.timeSamples / (float)strumTime );
     }
 }
