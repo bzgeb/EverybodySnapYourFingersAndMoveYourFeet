@@ -3,7 +3,6 @@ using System.Collections;
 
 public class RhythmTarget : MonoBehaviour 
 {
-    public MicControlC micControl;
     public Transform scaleTarget;
 
     public Vector2 minPosition;
@@ -50,9 +49,5 @@ public class RhythmTarget : MonoBehaviour
     void DoScale() {
         float scale = Mathf.Sin( Time.timeSinceLevelLoad ).Remap( -1, 1, 0.5f, 2 );
         scaleTarget.localScale = new Vector3( scale, scale, scale );
-
-        if ( micControl.loudness > 1.0f ) {
-            scaleTarget.localScale = new Vector3( 2.5f, 2.5f, 2.5f );
-        }
     }
 }
