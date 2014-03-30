@@ -8,7 +8,6 @@ public class Note : MonoBehaviour
     Transform _transform;
 
     public AudioSource music;
-    public int strumTime;
 
     public NoteData noteData;
     Vector3 targetPosition;
@@ -48,6 +47,9 @@ public class Note : MonoBehaviour
             xMultiplier = 1;
             yMultiplier = -1;
         }
+
+        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
+        meshRenderer.material = Global.Get().noteMaterials[ (int)noteData.target ];
     }
 
     void Update() {
