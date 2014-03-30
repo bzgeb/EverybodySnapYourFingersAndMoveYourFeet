@@ -14,58 +14,32 @@ public class LeapHandController : MonoBehaviour {
 
     Controller m_leapController;
 
-    Dictionary<int, GameObject> m_hands = new Dictionary<int, GameObject>();
+    public GameObject leftHand;
+    public GameObject rightHand;
 
-    public GameObject [] GetHandGameObjects() {
-        return m_hands.Values.ToArray();
-    }
+    Transform leftHandTransform;
+    Transform rightHandTransform;
 
     void Start () {
         m_leapController = new Controller();
+
+        leftHandTransform = leftHand.transform;
+        rightHandTransform = rightHand.transform;
     }
 
     void Update () {
         Frame f = m_leapController.Frame();
 
-        // mark exising hands as stale.
-        foreach(KeyValuePair<int, GameObject> h in m_hands) {
-            h.Value.GetComponent<UnityHand>().m_stale = true;
-        }
-
         // see what hands the leap sees and mark matching hands as not stale.
         for(int i = 0; i < f.Hands.Count; ++i) {
-            GameObject hand;
-
-            if (m_hands.TryGetValue(f.Hands[i].Id, out hand) == false) {
-                //create new hand
-                hand = Instantiate(Resources.Load("LeapMotion/Prefabs/UnityHand")) as GameObject;
-                hand.GetComponent<UnityHand>().Initialize(f.Hands[i], m_parent, m_offset);
-                // push it into the dictionary.
-                m_hands.Add(f.Hands[i].Id, hand);
-            }
-
-            // HACK to get around the id not resetting with handedness reset bug.
-            if (f.Hands[i].IsRight != hand.GetComponent<UnityHand>().GetLeapHand().IsRight) {
-                Debug.LogWarning("handedness not matching");
-                continue;
-            }
-
-            hand.GetComponent<UnityHand>().UpdateHand(f.Hands[i]);
-
-        }
-
-        // clear out stale hands.
-        List<int> staleIDs = new List<int>();
-        foreach(KeyValuePair<int, GameObject> h in m_hands) {
-            if (h.Value.GetComponent<UnityHand>().m_stale) {
-                Destroy(h.Value);
-                // set for removal from dictionary.
-                staleIDs.Add(h.Key);
+            Vector3 handPosition = f.Hands[i].PalmPosition.ToUnityScaled() + m_offset;
+            if ( f.Hands[i].IsRight ) {
+                rightHandTransform.position = handPosition;
+                HandTracker.rightHandPosition = handPosition;
+            } else {
+                leftHandTransform.position = handPosition;
+                HandTracker.leftHandPosition = handPosition;
             }
         }
-        foreach(int id in staleIDs) {
-            m_hands.Remove(id);
-        }
-
     }
 }

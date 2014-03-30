@@ -18,6 +18,8 @@ public class UnityHand : MonoBehaviour {
     float m_handScaleFactor = 1.0f;
     float m_leapExtensionScale = 1500.0f;
 
+    Vector3 positionOffset = new Vector3( 0, 0, 0 );
+
     public void Initialize(Hand h, Transform parent, Vector3 offset) {
         m_rawHand = h;
         if (h.IsRight) {
@@ -84,7 +86,7 @@ public class UnityHand : MonoBehaviour {
     void UpdateHandRig(Transform [] bones) {
 
         Transform armTransform = FindBone(bones, "Wrist");
-        armTransform.position = m_rawHand.PalmPosition.ToUnityScaled();
+        armTransform.position = m_rawHand.PalmPosition.ToUnityScaled() + positionOffset;
         
         armTransform.rotation = Quaternion.LookRotation(m_rawHand.Direction.ToUnity(), -m_rawHand.PalmNormal.ToUnity());
 
