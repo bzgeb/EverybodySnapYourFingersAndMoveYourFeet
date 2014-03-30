@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Music : MonoBehaviour 
 {
@@ -13,7 +14,7 @@ public class Music : MonoBehaviour
 
     public SongData songData;
 
-    public GameObject[] notes;
+    public List<GameObject> notes;
 
     public Object notePrefab;
 
@@ -65,11 +66,14 @@ public class Music : MonoBehaviour
         foreach ( GameObject go in notes ) {
             Destroy( go );
         }
+        notes.Clear();
 
         foreach ( NoteData noteData in songData.notes ) {
             GameObject newNote = Instantiate( notePrefab ) as GameObject;
             Note n = newNote.GetComponent<Note>();
             n.noteData = noteData;
+
+            notes.Add( newNote );
         }
     }
 
@@ -78,5 +82,7 @@ public class Music : MonoBehaviour
         Note n = newNote.GetComponent<Note>();
         n.noteData.timeInSamples = audio.timeSamples;
         songData.notes.Add( n.noteData );
+
+        notes.Add( newNote );
     }
 }
