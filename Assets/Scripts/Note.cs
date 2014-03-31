@@ -48,7 +48,7 @@ public class Note : MonoBehaviour
             yMultiplier = -1;
         }
 
-        MeshRenderer meshRenderer = GetComponentInChildren<MeshRenderer>();
+        SpriteRenderer meshRenderer = GetComponentInChildren<SpriteRenderer>();
         meshRenderer.material = Global.Get().noteMaterials[ (int)noteData.target ];
     }
 

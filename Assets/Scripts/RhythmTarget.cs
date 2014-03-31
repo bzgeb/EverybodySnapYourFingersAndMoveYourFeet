@@ -8,6 +8,9 @@ public class RhythmTarget : MonoBehaviour
     public Vector2 minPosition;
     public Vector2 maxPosition;
 
+    public float minScale = 0.75f;
+    public float maxScale = 1.25f;
+
     public NoteTarget targetIdentity;
 
     public static Vector3 TopLeftTargetPosition;
@@ -47,7 +50,7 @@ public class RhythmTarget : MonoBehaviour
     }
 
     void DoScale() {
-        float scale = Mathf.Sin( Time.timeSinceLevelLoad ).Remap( -1, 1, 0.5f, 2 );
+        float scale = Mathf.Sin( Time.timeSinceLevelLoad ).Remap( -1, 1, 0.75f, maxScale );
         scaleTarget.localScale = new Vector3( scale, scale, scale );
     }
 }
